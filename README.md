@@ -1,0 +1,1 @@
+# Bash_for_information_of_PC
