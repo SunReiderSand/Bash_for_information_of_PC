@@ -1,0 +1,16 @@
+#!/bin/bash
+
+# Собираем данные о ПК
+hostname=$(hostname)
+os=$(uname -s)
+kernel=$(uname -r)
+cpu=$(cat /proc/cpuinfo | grep "model name" | head -n 1 | cut -d ":" -f 2 | sed 's/^[ \t]*//')
+memory=$(free -h | awk '/^Mem:/ {print $2}')
+disk=$(df -h | awk '$NF=="/" {print $2}')
+ip=$(ip route get 8.8.8.8 | awk 'NR==1 {print $NF}')
+
+# Формируем сообщение с данными
+message="Имя хоста: $hostname\nОС: $os\nВерсия ядра: $kernel\nПроцессор: $cpu\nПамять: $memory\nДисковое пространство: $disk\nIP-адрес: $ip"
+
+# Отправляем сообщение на указанный адрес
+echo -e "$message" | mail -s "Данные о ПК" your-email@example.com
